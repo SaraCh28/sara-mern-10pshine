@@ -1,4 +1,5 @@
 const mysql = require('mysql2');
+const logger = require('./logger');
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
@@ -7,6 +8,19 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME || 'notes_app',
   waitForConnections: true,
   connectionLimit: 10,
+  queueLimit: 0,
 });
 
-module.exports = pool.promise();
+const promisePool = pool.promise();
+
+// Test the connection on startup
+pool.getConnection((err, connection) => {
+  if (err) {
+    logger.error({ err }, 'Failed to connect to MySQL database');
+    return;
+  }
+  logger.info('✅ MySQL database connected successfully');
+  connection.release();
+});
+
+module.exports = promisePool;
