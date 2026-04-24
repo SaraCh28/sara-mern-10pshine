@@ -1,0 +1,260 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 48px;
+}
+
+.profileSection {
+  margin-bottom: 48px;
+}
+
+.userCard {
+  padding: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.avatarWrapper {
+  position: relative;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  background: var(--bg-glass);
+  border: 4px solid var(--border-glass);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+}
+
+.editAvatar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--accent-purple);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.userName {
+  font-size: 1.5rem;
+}
+
+.userEmail {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 100px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.userActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.editBtn {
+  width: auto;
+}
+
+.logoutAction {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+}
+
+.logoutAction:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ef4444;
+}
+
+.groupTitle {
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+}
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.settingsCard {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settingsHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.settingsIcon {
+  width: 44px;
+  height: 44px;
+  background: var(--bg-glass);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-purple);
+}
+
+.settingsLabelWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsLabel {
+  font-weight: 600;
+}
+
+.settingsDetail {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.settingsValue {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toggle {
+  width: 40px;
+  height: 20px;
+  background: var(--accent-purple);
+  border-radius: 100px;
+  position: relative;
+}
+
+.toggle::after {
+  content: "";
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+}
+
+.progressArea {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.valueText {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.progressBar {
+  width: 120px;
+  height: 6px;
+  background: var(--bg-glass);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progressBar div {
+  height: 100%;
+  background: var(--gradient-primary);
+}
+
+.dangerZone {
+  padding: 32px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.05);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+.dangerTitle {
+  color: white;
+}
+
+.dangerText {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+}
+
+.deleteAccountBtn {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ef4444;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  padding: 10px 20px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.deleteAccountBtn:hover {
+  background: #ef4444;
+  color: white;
+}
