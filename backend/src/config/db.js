@@ -1,26 +1,22 @@
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 const logger = require('./logger');
 
-const pool = mysql.createPool({
+const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
+  user: process.env.DB_USER || 'sara',
+  password: process.env.DB_PASSWORD || 'password123',
   database: process.env.DB_NAME || 'notes_app',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+  port: process.env.DB_PORT || 5432,
 });
-
-const promisePool = pool.promise();
 
 // Test the connection on startup
-pool.getConnection((err, connection) => {
+pool.connect((err, client, release) => {
   if (err) {
-    logger.error({ err }, 'Failed to connect to MySQL database');
+    logger.error({ err }, 'Failed to connect to PostgreSQL database');
     return;
   }
-  logger.info('✅ MySQL database connected successfully');
-  connection.release();
+  logger.info('✅ PostgreSQL database connected successfully');
+  release();
 });
 
-module.exports = promisePool;
+module.exports = pool;

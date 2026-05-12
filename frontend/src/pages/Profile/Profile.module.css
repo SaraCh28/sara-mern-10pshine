@@ -64,6 +64,28 @@
   gap: 4px;
 }
 
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editInput {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-family: inherit;
+  width: 250px;
+}
+
+.editInput:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+}
+
 .userName {
   font-size: 1.5rem;
 }

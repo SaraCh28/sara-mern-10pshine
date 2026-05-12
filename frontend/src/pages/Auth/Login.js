@@ -50,7 +50,7 @@ const Login = () => {
       >
         <GlassPanel className={styles.card} blur="lg">
           <div className={styles.header}>
-            <h1 className={styles.logo}>Midnight Notes</h1>
+            <h1 className={styles.logo}>Journally</h1>
             <p className={styles.subtitle}>Welcome Back. Your thoughts await.</p>
           </div>
 
@@ -60,7 +60,7 @@ const Login = () => {
             <Input
               label="Email Address"
               type="email"
-              placeholder="curator@midnight.com"
+              placeholder="user@journally.com"
               icon={Mail}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
