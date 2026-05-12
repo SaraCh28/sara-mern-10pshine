@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { 
   Save, 
   Trash2, 
   ChevronLeft, 
-  Bold, 
-  Italic, 
-  List, 
-  Link as LinkIcon, 
-  Code,
+  Mic,
+  MicOff,
   Tag as TagIcon
 } from 'lucide-react';
 import Button from '../../components/common/Button';
@@ -19,11 +19,52 @@ import styles from './NoteEditor.module.css';
 const NoteEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const quillRef = useRef(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition();
+
+  useEffect(() => {
+    if (transcript) {
+      if (quillRef.current) {
+        const editor = quillRef.current.getEditor();
+        const cursorPosition = editor.getSelection()?.index || editor.getLength();
+        editor.insertText(cursorPosition, transcript + ' ');
+        editor.setSelection(cursorPosition + transcript.length + 1);
+      } else {
+        setContent(prev => prev + ' ' + transcript);
+      }
+      resetTranscript();
+    }
+  }, [transcript, resetTranscript]);
+
+  const toggleListening = () => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+    } else {
+      SpeechRecognition.startListening({ continuous: true });
+    }
+  };
+
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link', 'code-block'],
+      ['clean']
+    ]
+  };
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -93,7 +134,7 @@ const NoteEditor = () => {
             <span>Dashboard</span>
           </button>
           <div className={styles.status}>
-            {id ? 'Editing Note' : 'New Note'} — {content.length} characters
+            {id ? 'Editing Note' : 'New Note'}
           </div>
         </header>
 
@@ -106,11 +147,14 @@ const NoteEditor = () => {
           autoFocus
         />
 
-        <textarea
+        <ReactQuill
+          ref={quillRef}
+          theme="snow"
+          modules={modules}
           className={styles.contentArea}
           placeholder="Start writing your thoughts..."
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={setContent}
         />
       </div>
 
@@ -128,16 +172,21 @@ const NoteEditor = () => {
             </div>
           </div>
 
-          <div className={styles.panelSection}>
-            <h4 className={styles.sectionTitle}>FORMATTING</h4>
-            <div className={styles.toolbar}>
-              <button className={styles.toolBtn}><Bold size={18} /></button>
-              <button className={styles.toolBtn}><Italic size={18} /></button>
-              <button className={styles.toolBtn}><List size={18} /></button>
-              <button className={styles.toolBtn}><LinkIcon size={18} /></button>
-              <button className={styles.toolBtn}><Code size={18} /></button>
+          {browserSupportsSpeechRecognition && (
+            <div className={styles.panelSection}>
+              <h4 className={styles.sectionTitle}>VOICE TO TEXT</h4>
+              <div className={styles.actionButtons}>
+                <Button 
+                  variant={listening ? 'primary' : 'secondary'} 
+                  onClick={toggleListening}
+                  className={listening ? styles.listeningBtn : ''}
+                >
+                  {listening ? <MicOff size={18} /> : <Mic size={18} />} 
+                  {listening ? 'Stop Listening' : 'Start Dictation'}
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className={styles.panelSection}>
             <h4 className={styles.sectionTitle}>TAGS</h4>

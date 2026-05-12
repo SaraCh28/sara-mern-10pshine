@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Star, MoreHorizontal } from 'lucide-react';
+import { Clock, Star, MoreHorizontal, Archive, Download } from 'lucide-react';
 import GlassPanel from '../common/GlassPanel';
 import styles from './NoteCard.module.css';
 
-const NoteCard = ({ note, onClick }) => {
+const NoteCard = ({ note, onClick, onFavorite, onArchive, onDownloadPdf }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { 
@@ -28,13 +28,17 @@ const NoteCard = ({ note, onClick }) => {
           <div className={styles.topRow}>
             <span className={styles.type}>PERSONAL</span>
             <div className={styles.actions}>
-              <Star size={16} className={note.is_favorite ? styles.favorite : ''} />
-              <MoreHorizontal size={16} />
+                <Star size={16} className={note.is_pinned ? styles.favorite : ''} onClick={(e) => { e.stopPropagation(); onFavorite(note.id); }} />
+                <Archive size={16} onClick={(e) => { e.stopPropagation(); onArchive(note.id); }} />
+                <Download size={16} onClick={(e) => { e.stopPropagation(); onDownloadPdf(note.id); }} />
+                <MoreHorizontal size={16} />
             </div>
           </div>
 
           <h3 className={styles.title}>{note.title}</h3>
-          <p className={styles.excerpt}>{note.content}</p>
+          <p className={styles.excerpt}>
+            {note.content ? new DOMParser().parseFromString(note.content, 'text/html').body.textContent : ''}
+          </p>
 
           <div className={styles.footer}>
             <div className={styles.date}>
