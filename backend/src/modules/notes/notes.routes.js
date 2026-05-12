@@ -14,4 +14,8 @@ router.post('/', asyncHandler(notesController.createNote));
 router.put('/:id', asyncHandler(notesController.updateNote));
 router.delete('/:id', asyncHandler(notesController.deleteNote));
 
+// Toggle actions
+router.patch('/:id/favorite', asyncHandler(notesController.favoriteNote));
+router.patch('/:id/archive', asyncHandler(notesController.archiveNote));
+
 module.exports = router;

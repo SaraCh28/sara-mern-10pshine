@@ -3,11 +3,9 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   StickyNote, 
   Star, 
-  BookText, 
   Archive, 
   Tag, 
   Settings, 
-  HelpCircle,
   LogOut
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -25,7 +23,6 @@ const Sidebar = () => {
   const menuItems = [
     { icon: StickyNote, label: 'All Notes', path: '/' },
     { icon: Star, label: 'Favorites', path: '/favorites' },
-    { icon: BookText, label: 'Notebooks', path: '/notebooks' },
     { icon: Archive, label: 'Archive', path: '/archive' },
     { icon: Tag, label: 'Tags', path: '/tags' },
   ];
@@ -33,8 +30,8 @@ const Sidebar = () => {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logoArea}>
-        <div className={styles.logoIcon}>M</div>
-        <h2 className={styles.logoText}>Midnight</h2>
+        <div className={styles.logoIcon}>J</div>
+        <h2 className={styles.logoText}>Journally</h2>
       </div>
 
       <nav className={styles.nav}>
@@ -52,10 +49,6 @@ const Sidebar = () => {
       </nav>
 
       <div className={styles.footer}>
-        <NavLink to="/help" className={styles.footerItem}>
-          <HelpCircle size={20} />
-          <span>Help</span>
-        </NavLink>
         <NavLink to="/profile" className={styles.footerItem}>
           <Settings size={20} />
           <span>Settings</span>

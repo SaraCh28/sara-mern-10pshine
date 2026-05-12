@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { authService } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -8,23 +9,33 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      localStorage.setItem('token', token);
-      // In a real app, you might fetch the user profile here
-      // For now, we'll assume the user is authenticated if a token exists
-      // You can decode the JWT to get user info if needed
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        setUser({ id: payload.id, email: payload.email });
-      } catch (e) {
-        console.error('Invalid token', e);
-        logout();
+    const initAuth = async () => {
+      if (token) {
+        localStorage.setItem('token', token);
+        try {
+          // Fallback to token payload first for immediate UI
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          setUser({ id: payload.id, email: payload.email, name: payload.name });
+          
+          // Then fetch fresh data from server
+          const data = await authService.getMe();
+          if (data && data.data && data.data.user) {
+            setUser(data.data.user);
+          }
+        } catch (e) {
+          console.error('Auth initialization error', e);
+          // If token is truly invalid (e.g., expired), the interceptor or getMe might fail
+          // But we don't necessarily logout on every network error.
+          // We'll trust the interceptor to handle 401s.
+        }
+      } else {
+        localStorage.removeItem('token');
+        setUser(null);
       }
-    } else {
-      localStorage.removeItem('token');
-      setUser(null);
-    }
-    setLoading(false);
+      setLoading(false);
+    };
+
+    initAuth();
   }, [token]);
 
   const login = (userData, userToken) => {
