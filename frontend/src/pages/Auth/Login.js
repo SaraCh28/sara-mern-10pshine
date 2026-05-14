@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import { Mail, Lock, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
 import GlassPanel from '../../components/common/GlassPanel';
@@ -39,6 +40,23 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      const response = await authService.googleLogin(credentialResponse.credential);
+      login(response.data.user, response.data.token);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Google login failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Google login failed. Please try again.');
   };
 
   return (
@@ -90,13 +108,14 @@ const Login = () => {
             <div className={styles.divider}>
               <span>OR CONTINUE WITH</span>
             </div>
-            <div className={styles.socialButtons}>
-              <button className={styles.socialBtn} type="button">
-                <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" width={20} /> Google
-              </button>
-              <button className={styles.socialBtn} type="button">
-                <img src="https://www.svgrepo.com/show/448204/apple.svg" alt="Apple" width={20} /> Apple
-              </button>
+            <div className={styles.socialButtons} style={{ justifyContent: 'center' }}>
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                shape="pill"
+                theme="filled_black"
+                text="continue_with"
+              />
             </div>
           </div>
 
