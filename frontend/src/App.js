@@ -8,9 +8,11 @@ import Signup from './pages/Auth/Signup';
 import Dashboard from './pages/Dashboard/Dashboard';
 import NoteEditor from './pages/Editor/NoteEditor';
 import Profile from './pages/Profile/Profile';
+import Settings from './pages/Settings/Settings';
 import Favorites from './pages/Favorites/Favorites';
 import Archive from './pages/Archive/Archive';
 import Tags from './pages/Tags/Tags';
+import Notebooks from './pages/Notebooks/Notebooks';
 
 // Components
 import Layout from './components/layout/Layout';
@@ -62,6 +64,14 @@ function App() {
         </ProtectedRoute>
       } />
 
+      <Route path="/settings" element={
+        <ProtectedRoute>
+          <Layout>
+            <Settings />
+          </Layout>
+        </ProtectedRoute>
+      } />
+
       <Route path="/favorites" element={
         <ProtectedRoute>
           <Layout>
@@ -82,6 +92,14 @@ function App() {
         <ProtectedRoute>
           <Layout>
             <Tags />
+          </Layout>
+        </ProtectedRoute>
+      } />
+
+      <Route path="/notebooks" element={
+        <ProtectedRoute>
+          <Layout>
+            <Notebooks />
           </Layout>
         </ProtectedRoute>
       } />
