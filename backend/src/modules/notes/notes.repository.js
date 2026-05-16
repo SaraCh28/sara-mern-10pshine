@@ -2,25 +2,32 @@ const db = require('../../config/db');
 
 const findAllByUser = async (userId) => {
   const { rows } = await db.query(
-    'SELECT * FROM notes WHERE user_id = $1 ORDER BY is_pinned DESC, created_at DESC',
+    `SELECT n.*, nb.name as notebook_name 
+     FROM notes n 
+     LEFT JOIN notebooks nb ON n.notebook_id = nb.id 
+     WHERE n.user_id = $1 
+     ORDER BY n.is_pinned DESC, n.created_at DESC`,
     [userId]
   );
   return rows;
 };
 
 const findByIdAndUser = async (noteId, userId) => {
-  const { rows } = await db.query('SELECT * FROM notes WHERE id = $1 AND user_id = $2', [
-    noteId,
-    userId,
-  ]);
+  const { rows } = await db.query(
+    `SELECT n.*, nb.name as notebook_name 
+     FROM notes n 
+     LEFT JOIN notebooks nb ON n.notebook_id = nb.id 
+     WHERE n.id = $1 AND n.user_id = $2`, 
+    [noteId, userId]
+  );
   return rows[0];
 };
 
 const create = async (userId, noteData) => {
-  const { title, content, tags = '', is_pinned = false } = noteData;
+  const { title, content, tags = '', notebook_id = null, is_pinned = false } = noteData;
   const { rows } = await db.query(
-    'INSERT INTO notes (user_id, title, content, tags, is_pinned) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-    [userId, title, content, tags, is_pinned]
+    'INSERT INTO notes (user_id, title, content, tags, notebook_id, is_pinned) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+    [userId, title, content, tags, notebook_id, is_pinned]
   );
   return rows[0];
 };

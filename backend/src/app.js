@@ -6,6 +6,7 @@ const errorMiddleware = require('./middleware/error.middleware');
 
 const authRoutes = require('./modules/auth/auth.routes');
 const notesRoutes = require('./modules/notes/notes.routes');
+const notebooksRoutes = require('./modules/notebooks/notebooks.routes');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', notesRoutes);
+app.use('/api/notebooks', notebooksRoutes);
 
 // Unknown routes
 app.use((req, res) => {

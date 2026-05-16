@@ -43,6 +43,10 @@ export const authService = {
     const response = await api.post('/auth/register', { name, email, password });
     return response.data;
   },
+  googleLogin: async (credential) => {
+    const response = await api.post('/auth/google', { credential });
+    return response.data;
+  },
   getMe: async () => {
     const response = await api.get('/auth/me');
     return response.data;
@@ -76,6 +80,29 @@ export const notesService = {
   },
   deleteNote: async (id) => {
     const response = await api.delete(`/notes/${id}`);
+    return response.data;
+  },
+};
+
+export const notebooksService = {
+  getAllNotebooks: async () => {
+    const response = await api.get('/notebooks');
+    return response.data;
+  },
+  getNotebookById: async (id) => {
+    const response = await api.get(`/notebooks/${id}`);
+    return response.data;
+  },
+  createNotebook: async (name) => {
+    const response = await api.post('/notebooks', { name });
+    return response.data;
+  },
+  updateNotebook: async (id, name) => {
+    const response = await api.put(`/notebooks/${id}`, { name });
+    return response.data;
+  },
+  deleteNotebook: async (id) => {
+    const response = await api.delete(`/notebooks/${id}`);
     return response.data;
   },
 };
