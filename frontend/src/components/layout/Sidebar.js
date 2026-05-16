@@ -5,7 +5,6 @@ import {
   Star, 
   Archive, 
   Tag, 
-  Book,
   Settings, 
   LogOut
 } from 'lucide-react';
@@ -24,7 +23,6 @@ const Sidebar = () => {
   const menuItems = [
     { icon: StickyNote, label: 'All Notes', path: '/' },
     { icon: Star, label: 'Favorites', path: '/favorites' },
-    { icon: Book, label: 'Notebooks', path: '/notebooks' },
     { icon: Archive, label: 'Archive', path: '/archive' },
     { icon: Tag, label: 'Tags', path: '/tags' },
   ];
@@ -51,7 +49,7 @@ const Sidebar = () => {
       </nav>
 
       <div className={styles.footer}>
-        <NavLink to="/settings" className={styles.footerItem}>
+        <NavLink to="/profile" className={styles.footerItem}>
           <Settings size={20} />
           <span>Settings</span>
         </NavLink>

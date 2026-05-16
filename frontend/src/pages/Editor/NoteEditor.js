@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import Button from '../../components/common/Button';
 import GlassPanel from '../../components/common/GlassPanel';
-import { notesService, notebooksService } from '../../services/api';
+import { notesService } from '../../services/api';
 import styles from './NoteEditor.module.css';
 
 const NoteEditor = () => {
@@ -23,8 +23,6 @@ const NoteEditor = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
-  const [notebookId, setNotebookId] = useState('');
-  const [notebooks, setNotebooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
 
@@ -69,29 +67,26 @@ const NoteEditor = () => {
   };
 
   useEffect(() => {
-    const fetchInitialData = async () => {
+    const fetchNote = async () => {
       try {
         setFetching(true);
-        const notebooksRes = await notebooksService.getAllNotebooks();
-        setNotebooks(notebooksRes.data || []);
-
-        if (id) {
-          const data = await notesService.getNoteById(id);
-          const note = data.data;
-          setTitle(note.title || '');
-          setContent(note.content || '');
-          setTags(note.tags || '');
-          setNotebookId(note.notebook_id || '');
-        }
+        const data = await notesService.getNoteById(id);
+        const note = data.data;
+        setTitle(note.title || '');
+        setContent(note.content || '');
+        setTags(note.tags || '');
       } catch (err) {
-        console.error('Failed to fetch data', err);
+        console.error('Failed to fetch note', err);
+        navigate('/');
       } finally {
         setFetching(false);
       }
     };
 
-    fetchInitialData();
-  }, [id]);
+    if (id) {
+      fetchNote();
+    }
+  }, [id, navigate]);
 
 
   const handleSave = async () => {
@@ -99,12 +94,7 @@ const NoteEditor = () => {
     
     try {
       setLoading(true);
-      const noteData = { 
-        title, 
-        content, 
-        tags, 
-        notebook_id: notebookId ? parseInt(notebookId) : null 
-      };
+      const noteData = { title, content, tags };
       if (id) {
         await notesService.updateNote(id, noteData);
       } else {
@@ -199,18 +189,6 @@ const NoteEditor = () => {
           )}
 
           <div className={styles.panelSection}>
-            <h4 className={styles.sectionTitle}>NOTEBOOK</h4>
-            <select 
-              value={notebookId} 
-              onChange={(e) => setNotebookId(e.target.value)}
-              className={styles.tagInput}
-              style={{ width: '100%', marginBottom: '16px', background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid var(--border-glass)', padding: '8px', borderRadius: '4px' }}
-            >
-              <option value="">No Notebook (Independent)</option>
-              {notebooks.map(nb => (
-                <option key={nb.id} value={nb.id}>{nb.name}</option>
-              ))}
-            </select>
             <h4 className={styles.sectionTitle}>TAGS</h4>
             <div className={styles.tagInputWrapper}>
               <TagIcon size={16} className={styles.tagIcon} />

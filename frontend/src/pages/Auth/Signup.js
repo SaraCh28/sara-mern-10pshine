@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
 import { User, Mail, Lock, UserPlus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import GlassPanel from '../../components/common/GlassPanel';
@@ -40,23 +39,6 @@ const Signup = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      setLoading(true);
-      const response = await authService.googleLogin(credentialResponse.credential);
-      login(response.data.user, response.data.token);
-      navigate('/');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Google sign up failed.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleError = () => {
-    setError('Google sign up failed. Please try again.');
   };
 
   return (
@@ -109,21 +91,6 @@ const Signup = () => {
               Create Account <UserPlus size={18} />
             </Button>
           </form>
-
-          <div className={styles.socialAuth} style={{ marginTop: '24px' }}>
-            <div className={styles.divider}>
-              <span>OR CONTINUE WITH</span>
-            </div>
-            <div className={styles.socialButtons} style={{ justifyContent: 'center' }}>
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleError}
-                shape="pill"
-                theme="filled_black"
-                text="continue_with"
-              />
-            </div>
-          </div>
 
           <p className={styles.footer}>
             Already have an account? <Link to="/login">Sign In</Link>

@@ -29,29 +29,17 @@ BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
--- Notebooks Table
-CREATE TABLE IF NOT EXISTS notebooks (
-  id          SERIAL PRIMARY KEY,
-  user_id     INT NOT NULL,
-  name        VARCHAR(255) NOT NULL,
-  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_notebooks_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
 -- Notes Table
 CREATE TABLE IF NOT EXISTS notes (
   id          SERIAL PRIMARY KEY,
   user_id     INT NOT NULL,
   title       VARCHAR(255) NOT NULL,
   content     TEXT,
-  tags        VARCHAR(255) DEFAULT '',
-  notebook_id INT,
   is_pinned   BOOLEAN DEFAULT FALSE,
   is_archived BOOLEAN DEFAULT FALSE,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_notes_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT fk_notes_notebook FOREIGN KEY (notebook_id) REFERENCES notebooks(id) ON DELETE SET NULL
+  CONSTRAINT fk_notes_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Trigger for notes table

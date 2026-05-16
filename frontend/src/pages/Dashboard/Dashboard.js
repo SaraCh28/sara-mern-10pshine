@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Plus, Search, User, Inbox } from 'lucide-react';
+import { Plus, Search, User } from 'lucide-react';
 import NoteCard from '../../components/notes/NoteCard';
 import { notesService } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
@@ -129,9 +129,11 @@ const Dashboard = () => {
         <div className={styles.error}>{error}</div>
       ) : notes.length === 0 ? (
         <div className={styles.empty}>
-          <div style={{ background: 'rgba(168, 85, 247, 0.1)', padding: '24px', borderRadius: '50%', marginBottom: '16px', boxShadow: '0 0 20px rgba(168, 85, 247, 0.2)' }}>
-            <Inbox size={64} color="var(--accent-purple)" />
-          </div>
+          <img 
+            src="https://illustrations.popsy.co/white/meditating-man.svg" 
+            alt="Empty" 
+            width={200} 
+          />
           <h3>No notes found</h3>
           <p>Start your curation by creating a new note.</p>
           <button 
