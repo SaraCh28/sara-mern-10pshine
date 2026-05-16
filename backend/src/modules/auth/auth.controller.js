@@ -4,6 +4,8 @@ const { HTTP_STATUS } = require('../../utils/constants');
 const authService = require('./auth.service');
 const { registerSchema, loginSchema, updateProfileSchema } = require('./auth.validation');
 const logger = require('../../config/logger');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'dummy-client-id');
 
 const register = async (req, res) => {
   const { error } = registerSchema.validate(req.body);
@@ -59,6 +61,40 @@ const login = async (req, res) => {
   });
 };
 
+const googleLogin = async (req, res) => {
+  const { credential } = req.body;
+  if (!credential) {
+    return sendError(res, HTTP_STATUS.BAD_REQUEST, 'Credential is required');
+  }
+
+  try {
+    const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID || 'dummy-client-id',
+    });
+    const payload = ticket.getPayload();
+    const { email, name } = payload;
+    
+    let user = await authService.findUserByEmail(email);
+    if (!user) {
+        // Create user if they don't exist
+        const randomPassword = require('crypto').randomBytes(16).toString('hex');
+        user = await authService.createUser(name, email, randomPassword);
+    }
+    
+    const token = authService.generateToken(user);
+    logger.info({ userId: user.id, email }, 'User logged in with Google');
+    
+    return sendSuccess(res, HTTP_STATUS.OK, 'Login successful', {
+        user: { id: user.id, name: user.name, email: user.email },
+        token,
+    });
+  } catch (error) {
+      logger.error({ error }, 'Google login failed');
+      return sendError(res, HTTP_STATUS.UNAUTHORIZED, 'Invalid Google token');
+  }
+};
+
 const getMe = async (req, res) => {
     // req.user is set by authMiddleware
     const user = await authService.findUserByEmail(req.user.email);
@@ -109,6 +145,7 @@ const deleteMe = async (req, res) => {
 module.exports = {
   register,
   login,
+  googleLogin,
   getMe,
   updateMe,
   deleteMe,

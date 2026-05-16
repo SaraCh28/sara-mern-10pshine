@@ -7,10 +7,10 @@ import styles from './NoteCard.module.css';
 const NoteCard = ({ note, onClick, onFavorite, onArchive, onDownloadPdf }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
     });
   };
 
@@ -23,15 +23,15 @@ const NoteCard = ({ note, onClick, onFavorite, onArchive, onDownloadPdf }) => {
     >
       <GlassPanel className={styles.card}>
         <div className={styles.gradientHeader} />
-        
+
         <div className={styles.content}>
           <div className={styles.topRow}>
-            <span className={styles.type}>PERSONAL</span>
+            <span className={styles.type}>{note.notebook_name ? note.notebook_name.toUpperCase() : 'INDEPENDENT'}</span>
             <div className={styles.actions}>
-                <Star size={16} className={note.is_pinned ? styles.favorite : ''} onClick={(e) => { e.stopPropagation(); onFavorite(note.id); }} />
-                <Archive size={16} onClick={(e) => { e.stopPropagation(); onArchive(note.id); }} />
-                <Download size={16} onClick={(e) => { e.stopPropagation(); onDownloadPdf(note.id); }} />
-                <MoreHorizontal size={16} />
+              <Star size={16} className={note.is_pinned ? styles.favorite : ''} onClick={(e) => { e.stopPropagation(); onFavorite(note.id); }} />
+              <Archive size={16} onClick={(e) => { e.stopPropagation(); onArchive(note.id); }} />
+              <Download size={16} onClick={(e) => { e.stopPropagation(); onDownloadPdf(note.id); }} />
+              {/* <MoreHorizontal size={16} /> */}
             </div>
           </div>
 
