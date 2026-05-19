@@ -171,3 +171,21 @@
   color: var(--text-muted);
   font-weight: 600;
 }
+
+/* Responsive Image Styling within note content editor */
+.contentArea :global(.ql-editor) img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-glass);
+  margin: 16px 0;
+  display: block;
+  box-shadow: var(--shadow-glass);
+  transition: all 0.3s ease;
+}
+
+.contentArea :global(.ql-editor) img:hover {
+  transform: scale(1.01);
+  border-color: var(--accent-purple);
+}
+

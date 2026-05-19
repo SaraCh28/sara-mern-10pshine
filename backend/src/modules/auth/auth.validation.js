@@ -15,6 +15,9 @@ const updateProfileSchema = Joi.object({
   name: Joi.string().min(2).max(100).optional(),
   email: Joi.string().email().optional(),
   password: Joi.string().min(6).optional(),
+  gender: Joi.string().allow('', null).optional(),
+  age: Joi.number().integer().min(0).max(150).allow(null).optional(),
+  occupation: Joi.string().allow('', null).max(100).optional(),
 }).min(1);
 
 module.exports = {

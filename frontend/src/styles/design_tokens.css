@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
 :root {
   --bg-dark: #0D0F14;
   --bg-card: rgba(30, 41, 59, 0.5); /* Semi-transparent blue-gray */
@@ -40,6 +42,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -70,3 +73,187 @@ a {
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-md);
 }
+
+/* Themes */
+body.theme-midnight {
+  /* Uses default :root tokens */
+}
+
+body.theme-dreamscape {
+  --bg-dark: #FAF7F2; /* Soft ivory cream */
+  --bg-card: rgba(255, 255, 255, 0.45); /* Translucent pearl glassmorphism */
+  --bg-glass: rgba(255, 255, 255, 0.35);
+  --border-glass: rgba(255, 240, 242, 0.5); /* Delicate blush pink border glow */
+  
+  --accent-purple: #D8B4FE; /* Faded lavender */
+  --accent-purple-glow: rgba(216, 180, 254, 0.3);
+  --accent-blue: #A7F3D0; /* Soft sage green */
+  --accent-pink: #FFE4E6; /* Blush pink */
+  
+  --text-primary: #5C5355; /* Soft, warm rose-charcoal slate (excellent contrast, elegant and warm!) */
+  --text-secondary: #8E8285; /* Dusty slate/rose secondary text */
+  --text-muted: #BCB3B5; /* Soft misty silver/pink-grey muted text */
+  
+  --gradient-primary: linear-gradient(135deg, #FFE4E6 0%, #FFFBEB 50%, #ECFDF5 100%); /* Gorgeous diluted watercolor botanical gradient */
+  --shadow-glass: 0 8px 32px 0 rgba(225, 200, 205, 0.12);
+  
+  /* Softer curves for an ethereal aesthetic */
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-xl: 36px;
+}
+
+/* Custom details for Dreamscape Light Ethereal theme */
+body.theme-dreamscape {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(255, 228, 230, 0.5) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(255, 251, 235, 0.55) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(236, 253, 245, 0.45) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(254, 243, 199, 0.3) 0px, transparent 50%),
+    linear-gradient(180deg, #FAF7F2 0%, #FFF5F6 100%) !important;
+  background-attachment: fixed;
+}
+
+body.theme-dreamscape h1,
+body.theme-dreamscape h2,
+body.theme-dreamscape h3,
+body.theme-dreamscape h4,
+body.theme-dreamscape h5,
+body.theme-dreamscape h6,
+body.theme-dreamscape .userName,
+body.theme-dreamscape .title {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+  font-weight: 500 !important;
+  color: #4A3E40 !important; /* Elegant deep botanical rose-tinted espresso */
+  letter-spacing: 0.02em;
+}
+
+/* Make glass cards breathe with the soft bloom light */
+body.theme-dreamscape .glass-morphism,
+body.theme-dreamscape [class*="glass-morphism"],
+body.theme-dreamscape [class*="card"],
+body.theme-dreamscape [class*="Panel"] {
+  background: rgba(255, 255, 255, 0.45) !important;
+  border: 1px solid rgba(255, 240, 242, 0.6) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  animation: slowGlow 8s ease-in-out infinite;
+  box-shadow: 0 8px 32px 0 rgba(225, 200, 205, 0.12) !important;
+  border-radius: 20px !important;
+}
+
+/* Soft watercolor glowing animations */
+@keyframes slowGlow {
+  0% {
+    box-shadow: 0 8px 32px 0 rgba(255, 228, 230, 0.15), 0 0 20px 0 rgba(255, 251, 235, 0.05);
+    border-color: rgba(255, 240, 242, 0.6);
+  }
+  50% {
+    box-shadow: 0 8px 32px 0 rgba(236, 253, 245, 0.22), 0 0 35px 5px rgba(255, 228, 230, 0.18);
+    border-color: rgba(236, 253, 245, 0.7);
+  }
+  100% {
+    box-shadow: 0 8px 32px 0 rgba(255, 228, 230, 0.15), 0 0 20px 0 rgba(255, 251, 235, 0.05);
+    border-color: rgba(255, 240, 242, 0.6);
+  }
+}
+
+/* Override input placeholder text and fields inside dreamscape */
+body.theme-dreamscape input::placeholder,
+body.theme-dreamscape textarea::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.8;
+}
+
+body.theme-dreamscape input,
+body.theme-dreamscape select,
+body.theme-dreamscape textarea {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(255, 240, 242, 0.8) !important;
+  color: var(--text-primary) !important;
+}
+
+body.theme-dreamscape input:focus,
+body.theme-dreamscape select:focus,
+body.theme-dreamscape textarea:focus {
+  border-color: var(--accent-purple) !important;
+  box-shadow: 0 0 10px rgba(216, 180, 254, 0.4) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Beautiful soft navigation overlays */
+body.theme-dreamscape nav, 
+body.theme-dreamscape aside {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-right: 1px solid rgba(255, 240, 242, 0.4) !important;
+}
+
+/* Customize buttons to have that airy, soft, feminine gold/rose-gold gradient */
+body.theme-dreamscape button,
+body.theme-dreamscape button[variant="primary"],
+body.theme-dreamscape [class*="btn-primary"] {
+  background: linear-gradient(135deg, #FFE4E6 0%, #FDE68A 100%) !important;
+  color: #5C5355 !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(253, 230, 138, 0.5) !important;
+  box-shadow: 0 4px 14px rgba(255, 228, 230, 0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+body.theme-dreamscape button:hover,
+body.theme-dreamscape button[variant="primary"]:hover,
+body.theme-dreamscape [class*="btn-primary"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(253, 230, 138, 0.6) !important;
+  background: linear-gradient(135deg, #FDE68A 0%, #FFE4E6 100%) !important;
+}
+
+body.theme-dreamscape button[variant="secondary"],
+body.theme-dreamscape [class*="btn-secondary"] {
+  background: rgba(255, 255, 255, 0.5) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid rgba(255, 240, 242, 0.8) !important;
+}
+
+body.theme-dreamscape button[variant="secondary"]:hover,
+body.theme-dreamscape [class*="btn-secondary"]:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: var(--accent-purple) !important;
+}
+
+/* Custom scrollbars inside dreamscape to match greenhouse aesthetic */
+body.theme-dreamscape ::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+body.theme-dreamscape ::-webkit-scrollbar-thumb {
+  background: rgba(255, 228, 230, 0.6) !important;
+  border: 2px solid #FAF7F2 !important;
+}
+
+body.theme-dreamscape ::-webkit-scrollbar-thumb:hover {
+  background: rgba(216, 180, 254, 0.6) !important;
+}
+
+/* Ensure nice smooth background-color and color transitions for other structural elements */
+.glass-morphism, 
+div, 
+header, 
+aside, 
+main, 
+section, 
+span, 
+p, 
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6, 
+button, 
+input, 
+select, 
+textarea {
+  transition: background 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+}
+
