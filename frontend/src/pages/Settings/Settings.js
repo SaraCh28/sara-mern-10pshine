@@ -1,40 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Smartphone, 
   ShieldCheck, 
-  Bell, 
+  Palette, 
   Database,
   ChevronRight
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 import GlassPanel from '../../components/common/GlassPanel';
 import styles from '../Profile/Profile.module.css';
 
 const Settings = () => {
-  const [notificationsEnabled, setNotificationsEnabled] = useState(
-    localStorage.getItem('notifications') !== 'false'
-  );
-
-  const toggleNotifications = () => {
-    const newVal = !notificationsEnabled;
-    setNotificationsEnabled(newVal);
-    localStorage.setItem('notifications', newVal.toString());
-  };
+  const { theme, toggleTheme } = useTheme();
 
   const settingsGroups = [
     {
       title: 'Preferences',
       items: [
-        { icon: Smartphone, label: 'Appearance', detail: 'Current Theme', value: 'MIDNIGHT DEPTH' },
-        { icon: ShieldCheck, label: 'Security', detail: 'Last Password Change', value: '3 months ago' },
         { 
-          icon: Bell, 
-          label: 'Notifications', 
-          detail: 'Push Notifications', 
-          value: notificationsEnabled ? 'Active' : 'Disabled', 
-          isToggle: true,
-          isActive: notificationsEnabled,
-          onClick: toggleNotifications
+          icon: Smartphone, 
+          label: 'Appearance', 
+          detail: 'Active Theme', 
+          value: theme === 'midnight' ? 'Midnight 🌙' : 'Dreamscape 🌸' 
         },
+        { 
+          icon: Palette, 
+          label: 'Theme Changer', 
+          detail: 'Toggle Botanical Haze', 
+          value: theme === 'midnight' ? 'Enter the Celestial Greenhouse ✨' : 'Return to Midnight Depths 🌙', 
+          onClick: toggleTheme
+        },
+        { icon: ShieldCheck, label: 'Security', detail: 'Last Password Change', value: '3 months ago' },
         { icon: Database, label: 'Storage', detail: 'Usage', value: '0.8 GB of 10 GB', isProgress: true, progress: 8 },
       ]
     }

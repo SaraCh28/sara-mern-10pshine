@@ -43,7 +43,7 @@ const NoteCard = ({ note, onClick, onFavorite, onArchive, onDownloadPdf }) => {
           <div className={styles.footer}>
             <div className={styles.date}>
               <Clock size={14} />
-              <span>{formatDate(note.updated_at || note.created_at)}</span>
+              <span>{formatDate(note.created_at || note.updated_at)}</span>
             </div>
             {note.tags && (
               <div className={styles.tags}>

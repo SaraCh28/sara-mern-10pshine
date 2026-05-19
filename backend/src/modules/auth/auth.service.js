@@ -47,7 +47,7 @@ const updateUser = async (userId, updateData) => {
   if (fields.length === 0) return null;
 
   values.push(userId);
-  const query = `UPDATE users SET ${fields.join(', ')} WHERE id = $${index} RETURNING id, name, email`;
+  const query = `UPDATE users SET ${fields.join(', ')} WHERE id = $${index} RETURNING id, name, email, gender, age, occupation`;
   
   const { rows } = await db.query(query, values);
   return rows[0];

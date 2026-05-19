@@ -2,13 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { 
   Save, 
   Trash2, 
   ChevronLeft, 
-  Mic,
-  MicOff,
+  Image as ImageIcon,
   Tag as TagIcon
 } from 'lucide-react';
 import Button from '../../components/common/Button';
@@ -20,6 +18,7 @@ const NoteEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const quillRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
@@ -28,33 +27,34 @@ const NoteEditor = () => {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
 
-  const {
-    transcript,
-    listening,
-    resetTranscript,
-    browserSupportsSpeechRecognition
-  } = useSpeechRecognition();
+  const handleImageUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
-  useEffect(() => {
-    if (transcript) {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file (PNG, JPG, etc.).');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target.result;
       if (quillRef.current) {
         const editor = quillRef.current.getEditor();
-        const cursorPosition = editor.getSelection()?.index || editor.getLength();
-        editor.insertText(cursorPosition, transcript + ' ');
-        editor.setSelection(cursorPosition + transcript.length + 1);
-      } else {
-        setContent(prev => prev + ' ' + transcript);
+        const range = editor.getSelection();
+        const cursorIndex = range ? range.index : editor.getLength();
+        editor.insertEmbed(cursorIndex, 'image', base64);
+        editor.setSelection(cursorIndex + 1);
       }
-      resetTranscript();
-    }
-  }, [transcript, resetTranscript]);
-
-  const toggleListening = () => {
-    if (listening) {
-      SpeechRecognition.stopListening();
-    } else {
-      SpeechRecognition.startListening({ continuous: true });
-    }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ''; // Reset file input
   };
 
   const modules = {
@@ -182,21 +182,21 @@ const NoteEditor = () => {
             </div>
           </div>
 
-          {browserSupportsSpeechRecognition && (
-            <div className={styles.panelSection}>
-              <h4 className={styles.sectionTitle}>VOICE TO TEXT</h4>
-              <div className={styles.actionButtons}>
-                <Button 
-                  variant={listening ? 'primary' : 'secondary'} 
-                  onClick={toggleListening}
-                  className={listening ? styles.listeningBtn : ''}
-                >
-                  {listening ? <MicOff size={18} /> : <Mic size={18} />} 
-                  {listening ? 'Stop Listening' : 'Start Dictation'}
-                </Button>
-              </div>
+          <div className={styles.panelSection}>
+            <h4 className={styles.sectionTitle}>IMAGE UPLOAD</h4>
+            <div className={styles.actionButtons}>
+              <Button onClick={handleImageUploadClick} variant="secondary" style={{ width: '100%' }}>
+                <ImageIcon size={18} style={{ marginRight: '0.5rem' }} /> Upload Image
+              </Button>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleImageChange} 
+                accept="image/*" 
+                style={{ display: 'none' }} 
+              />
             </div>
-          )}
+          </div>
 
           <div className={styles.panelSection}>
             <h4 className={styles.sectionTitle}>NOTEBOOK</h4>
@@ -204,11 +204,20 @@ const NoteEditor = () => {
               value={notebookId} 
               onChange={(e) => setNotebookId(e.target.value)}
               className={styles.tagInput}
-              style={{ width: '100%', marginBottom: '16px', background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid var(--border-glass)', padding: '8px', borderRadius: '4px' }}
+              style={{ 
+                width: '100%', 
+                marginBottom: '16px', 
+                background: 'var(--bg-dark)', 
+                color: 'var(--text-primary)', 
+                border: '1px solid var(--border-glass)', 
+                padding: '8px', 
+                borderRadius: '4px',
+                outline: 'none'
+              }}
             >
-              <option value="">No Notebook (Independent)</option>
+              <option value="" style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)' }}>No Notebook (Independent)</option>
               {notebooks.map(nb => (
-                <option key={nb.id} value={nb.id}>{nb.name}</option>
+                <option key={nb.id} value={nb.id} style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)' }}>{nb.name}</option>
               ))}
             </select>
             <h4 className={styles.sectionTitle}>TAGS</h4>

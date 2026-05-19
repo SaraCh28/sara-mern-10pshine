@@ -21,6 +21,9 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState('');
   const [editEmail, setEditEmail] = useState('');
+  const [editGender, setEditGender] = useState('');
+  const [editAge, setEditAge] = useState('');
+  const [editOccupation, setEditOccupation] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -28,6 +31,9 @@ const Profile = () => {
     if (user) {
       setEditName(user.name || '');
       setEditEmail(user.email || '');
+      setEditGender(user.gender || '');
+      setEditAge(user.age !== undefined && user.age !== null ? user.age.toString() : '');
+      setEditOccupation(user.occupation || '');
     }
   }, [user]);
 
@@ -40,7 +46,13 @@ const Profile = () => {
     try {
       setIsSaving(true);
       setError('');
-      const data = await authService.updateProfile({ name: editName, email: editEmail });
+      const updateData = {
+        name: editName,
+        gender: editGender || null,
+        age: editAge ? parseInt(editAge, 10) : null,
+        occupation: editOccupation || null
+      };
+      const data = await authService.updateProfile(updateData);
       if (data && data.data) {
         login(data.data.user, data.data.token);
         setIsEditing(false);
@@ -79,6 +91,7 @@ const Profile = () => {
             <div className={styles.userDetails}>
               {isEditing ? (
                 <div className={styles.editForm}>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem', textAlign: 'left' }}>Full Name</label>
                   <input 
                     type="text" 
                     value={editName} 
@@ -86,12 +99,45 @@ const Profile = () => {
                     className={styles.editInput}
                     placeholder="Full Name"
                   />
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem', textAlign: 'left' }}>Email Address (Uneditable)</label>
                   <input 
                     type="email" 
                     value={editEmail} 
-                    onChange={(e) => setEditEmail(e.target.value)}
                     className={styles.editInput}
-                    placeholder="Email Address"
+                    disabled
+                    style={{ opacity: 0.6, cursor: 'not-allowed' }}
+                  />
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem', textAlign: 'left' }}>Gender</label>
+                  <select
+                    value={editGender}
+                    onChange={(e) => setEditGender(e.target.value)}
+                    className={styles.editInput}
+                    style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--border-glass)', marginBottom: '0.75rem' }}
+                  >
+                    <option value="" style={{ background: 'var(--bg-dark)' }}>Select Gender</option>
+                    <option value="Female" style={{ background: 'var(--bg-dark)' }}>Female</option>
+                    <option value="Male" style={{ background: 'var(--bg-dark)' }}>Male</option>
+                    <option value="Non-binary" style={{ background: 'var(--bg-dark)' }}>Non-binary</option>
+                    <option value="Other" style={{ background: 'var(--bg-dark)' }}>Other</option>
+                    <option value="Prefer not to say" style={{ background: 'var(--bg-dark)' }}>Prefer not to say</option>
+                  </select>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem', textAlign: 'left' }}>Age</label>
+                  <input 
+                    type="number" 
+                    value={editAge} 
+                    onChange={(e) => setEditAge(e.target.value)}
+                    className={styles.editInput}
+                    placeholder="Age"
+                    min="0"
+                    max="150"
+                  />
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem', textAlign: 'left' }}>Occupation</label>
+                  <input 
+                    type="text" 
+                    value={editOccupation} 
+                    onChange={(e) => setEditOccupation(e.target.value)}
+                    className={styles.editInput}
+                    placeholder="Occupation"
                   />
                   {error && <p className={styles.errorText} style={{ color: '#ff6b6b', fontSize: '0.875rem', marginTop: '0.25rem' }}>{error}</p>}
                 </div>
@@ -99,9 +145,16 @@ const Profile = () => {
                 <>
                   <h2 className={styles.userName}>{user?.name || 'User'}</h2>
                   <p className={styles.userEmail}>{user?.email || 'user@example.com'}</p>
+                  
+                  <div className={styles.metadataFields} style={{ margin: '0.75rem 0', display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.9rem', color: 'var(--text-secondary)', textAlign: 'left' }}>
+                    {user?.gender && <div><strong>Gender:</strong> {user.gender}</div>}
+                    {user?.age && <div><strong>Age:</strong> {user.age}</div>}
+                    {user?.occupation && <div><strong>Occupation:</strong> {user.occupation}</div>}
+                  </div>
+
                   <div className={styles.badges}>
-                    <span className={styles.badge}>PREMIUM MEMBER</span>
-                    <span className={styles.badge}>EDITOR SINCE 2023</span>
+                    <span className={styles.badge} title="Complimentary Lifetime Premium for founding editors">PREMIUM MEMBER</span>
+                    <span className={styles.badge}>EDITOR SINCE {user?.created_at ? new Date(user.created_at).getFullYear() : 2023}</span>
                   </div>
                 </>
               )}

@@ -56,7 +56,7 @@ const login = async (req, res) => {
   logger.info({ userId: user.id, email }, 'User logged in successfully');
 
   return sendSuccess(res, HTTP_STATUS.OK, 'Login successful', {
-    user: { id: user.id, name: user.name, email: user.email },
+    user: { id: user.id, name: user.name, email: user.email, gender: user.gender, age: user.age, occupation: user.occupation, created_at: user.created_at },
     token,
   });
 };
@@ -86,7 +86,7 @@ const googleLogin = async (req, res) => {
     logger.info({ userId: user.id, email }, 'User logged in with Google');
     
     return sendSuccess(res, HTTP_STATUS.OK, 'Login successful', {
-        user: { id: user.id, name: user.name, email: user.email },
+        user: { id: user.id, name: user.name, email: user.email, gender: user.gender, age: user.age, occupation: user.occupation, created_at: user.created_at },
         token,
     });
   } catch (error) {
@@ -102,7 +102,7 @@ const getMe = async (req, res) => {
         return sendError(res, HTTP_STATUS.NOT_FOUND, 'User not found.');
     }
     return sendSuccess(res, HTTP_STATUS.OK, 'User details fetched', {
-        user: { id: user.id, name: user.name, email: user.email }
+        user: { id: user.id, name: user.name, email: user.email, gender: user.gender, age: user.age, occupation: user.occupation, created_at: user.created_at }
     });
 }
 
